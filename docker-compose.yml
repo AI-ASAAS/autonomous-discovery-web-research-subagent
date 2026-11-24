@@ -1,0 +1,32 @@
+services:
+  discovery:
+    build: .
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    env_file: .env
+    environment:
+      DATABASE_URL: sqlite:////app/data/grants.db
+      GRANTS_DB_PATH: /app/data/grants.db
+      SESSIONS_DB_PATH: /app/data/sessions.db
+    volumes:
+      - platform-data:/app/data
+    ports:
+      - "8001:8001"
+    init: true
+
+  platform:
+    build: .
+    command:
+      ["python", "-m", "agent_platform.main", "--host", "0.0.0.0", "--port", "8010"]
+    env_file: .env
+    environment:
+      DATABASE_URL: sqlite:////app/data/grants.db
+      GRANTS_DB_PATH: /app/data/grants.db
+      SESSIONS_DB_PATH: /app/data/sessions.db
+    volumes:
+      - platform-data:/app/data
+    ports:
+      - "8010:8010"
+    init: true
+
+volumes:
+  platform-data:

@@ -26,6 +26,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from api.admin_auth import AdminAuthMiddleware
 from api.schemas import (
     ExternalSearchRequest,
     GrantCountsResponse,
@@ -85,6 +86,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Outermost layer: admin checks run before CORS, while OPTIONS passes through.
+app.add_middleware(AdminAuthMiddleware)
 
 
 # ---------------------------------------------------------------------------

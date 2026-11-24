@@ -12,7 +12,8 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8000
+    PORT=8000 \
+    PYTHONPATH=/app:/app/src
 
 COPY requirements-deploy.txt ./
 RUN pip install --no-cache-dir -r requirements-deploy.txt
@@ -24,6 +25,8 @@ COPY utils/ ./utils/
 COPY prompts/ ./prompts/
 COPY seed/ ./seed/
 COPY integrations/ ./integrations/
+COPY ai/ ./ai/
+COPY src/ ./src/
 COPY ingestion_sub_agent.py external_search_sub_agent.py monitor_service.py ./
 
 # Copy built frontend static assets
